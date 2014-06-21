@@ -101,9 +101,9 @@ Polymer 'darts-ui',
         return points
 
     onClick: (event) ->
-        @blur @focusedElement if @focusedElement?
+        @removeFocus @focusedElement if @focusedElement?
 
-        @focus event.target
+        @setFocus event.target
 
         id = event.target.id
         [score, ratio] = id.split '-'
@@ -112,11 +112,11 @@ Polymer 'darts-ui',
 
         @fire 'hit', {score, ratio}
 
-    focus: (element) ->
+    setFocus: (element) ->
         element.classList.add @FOCUS_CLASS
         @focusedElement = element
 
-    blur: (element) ->
+    removeFocus: (element) ->
         element.classList.remove @FOCUS_CLASS
         @focusedElement = null
 
@@ -124,5 +124,5 @@ Polymer 'darts-ui',
         id = @dartsDevice.getId value
         cell = @cells[id]
 
-        @blur @focusedElement if @focusedElement?
-        @focus cell.node
+        @removeFocus @focusedElement if @focusedElement?
+        @setFocus cell.node
