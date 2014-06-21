@@ -8,8 +8,6 @@ Polymer 'darts-ui',
   centerY: null
   radius: null
 
-  focuses: []
-
   ready: ->
     width = @.$.darts.clientWidth || parseInt @.$.darts.getAttribute('width')
     height = @.$.darts.clientHeight || parseInt @.$.darts.getAttribute('height')
@@ -43,10 +41,9 @@ Polymer 'darts-ui',
   drawRings: (s, className, key, radius, strokeWidth) ->
     rings = s.g()
 
-    for i in [0..19]
+    for p, i in @POINTS
       angle0 = (i * 18 - 9) * Math.PI / 180
       angle1 = (i * 18 + 9) * Math.PI / 180
-
       x0 = @centerX + radius * Math.sin angle0
       y0 = @centerY - radius * Math.cos angle0
       x1 = @centerX + radius * Math.sin angle1
@@ -56,27 +53,37 @@ Polymer 'darts-ui',
       ring.attr
         class: className
         strokeWidth: strokeWidth
-        id: @POINTS[i] + '-' + key
+        id: p + '-' + key
 
       rings.append ring
 
   drawPoints: (s, className, radius) ->
     points = s.g().attr {class: 'points'}
 
-    for i in [0..19]
+    for p, i in @POINTS
       angle = (i * 18) * Math.PI / 180
       x = @centerX + radius * Math.sin angle
       y = @centerY - radius * Math.cos angle
-      point = s.text x, y, @POINTS[i]
+
+      point = s.text x, y, p
       point.attr
         class: className
         fontSize: (radius * 0.15) + 'px'
-
-      height = point.getBBox().height
       point.attr
-        dy: height / 2.8
+        dy: point.getBBox().height / 2.8
 
       points.append point
+
+  focusesChanged: (oldFocuses, newFocuses) ->
+    if oldFocuses?.length > 0
+      for focus in oldFocuses.split ' '
+        element = @.$.darts.getElementById focus
+        element.classList.remove @FOCUS_CLASS if element?
+
+    if newFocuses?.length > 0
+      for focus in newFocuses.split ' '
+        element = @.$.darts.getElementById focus
+        element.classList.add @FOCUS_CLASS if element?
 
   onClick: (event) ->
     id = event.target.id
@@ -84,14 +91,3 @@ Polymer 'darts-ui',
 
     [score, ratio] = id.split '-'
     @fire 'hit', {score, ratio} if ratio?
-
-  focusesChanged: (oldFocuses, newFocuses) ->
-    if oldFocuses.length > 0
-      for focus in oldFocuses.split ' '
-        element = @.$.darts.getElementById focus
-        element.classList.remove @FOCUS_CLASS if element?
-
-    if newFocuses.length > 0
-      for focus in newFocuses.split ' '
-        element = @.$.darts.getElementById focus
-        element.classList.add @FOCUS_CLASS if element?
