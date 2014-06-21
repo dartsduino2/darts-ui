@@ -13,7 +13,7 @@ Polymer 'darts-ui',
     height = @.$.darts.clientHeight || parseInt @.$.darts.getAttribute('height')
     @centerX = width / 2
     @centerY = height / 2
-    @radius = Math.min(@centerX, @centerY) * 0.95
+    @radius = Math.min(@centerX, @centerY) - 2
 
     @draw()
 
@@ -30,7 +30,7 @@ Polymer 'darts-ui',
     @drawCircle s, 'darts-cell darts-bull darts-bull-outer', '25-1', @radius * 0.1
     @drawCircle s, 'darts-cell darts-bull darts-bull-inner', '25-2', @radius * 0.05
 
-    @drawPoints s, 'darts-point', @radius * 0.9, @radius * 0.1, '#fff'
+    @drawPoints s, 'darts-point', @radius * 0.88
 
   drawCircle: (s, className, key, radius) ->
     circle = s.circle @centerX, @centerY, radius
@@ -68,9 +68,8 @@ Polymer 'darts-ui',
       point = s.text x, y, p
       point.attr
         class: className
-        fontSize: (radius * 0.15) + 'px'
-      point.attr
-        dy: point.getBBox().height / 2.8
+        fontSize: radius * 0.16
+        dy: radius * 0.06
 
       points.append point
 
