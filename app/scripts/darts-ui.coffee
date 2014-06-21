@@ -14,6 +14,7 @@ Polymer 'darts-ui',
 
     cells: {}
     focusedElement: null
+    focuses: []
 
     ready: ->
         @root = @.$.darts
@@ -28,6 +29,8 @@ Polymer 'darts-ui',
         dartsUi = @draw()
 
         # @dartsDevice = new DartsDevice()
+
+        @showFocuses()
 
     draw: ->
         dartsUi = @s.g();
@@ -119,6 +122,11 @@ Polymer 'darts-ui',
     removeFocus: (element) ->
         element.classList.remove @FOCUS_CLASS
         @focusedElement = null
+
+    showFocuses: ->
+        for focus in @focuses.split ' '
+            element = @.$.darts.getElementById(focus)
+            @setFocus element if element?
 
     hit: (value) ->
         id = @dartsDevice.getId value
