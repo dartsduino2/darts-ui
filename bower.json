@@ -1,0 +1,9 @@
+{
+  "name": "darts-ui",
+  "private": true,
+  "dependencies": {
+    "polymer": "Polymer/polymer#~0.3.3",
+    "Snap.svg": "~0.3.0"
+  },
+  "devDependencies": {}
+}
