@@ -2,7 +2,8 @@
   "name": "darts-ui",
   "private": true,
   "dependencies": {
-    "jquery": "~1.11.1"
+    "polymer": "Polymer/polymer#~0.3.3",
+    "Snap.svg": "~0.3.0"
   },
   "devDependencies": {}
 }
