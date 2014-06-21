@@ -1,0 +1,1 @@
+(function(){"use strict";var a;a=document.querySelector("darts-ui"),a.addEventListener("hit",function(a){var b,c,d;return d=a.detail,c=d.score,b=d.ratio,console.log(c+", "+b+" = "+c*b)}),a.setAttribute("focuses","25-2 12-1-o")}).call(this);
