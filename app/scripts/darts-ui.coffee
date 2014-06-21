@@ -4,60 +4,44 @@ Polymer 'darts-ui',
   POINTS: [20, 1, 18, 4, 13, 6, 10, 15, 2, 17, 3, 19, 7, 16, 8, 11, 14, 9, 12, 5]
   FOCUS_CLASS: 'darts-focus'
 
-  dartsDevice: null
-
-  root: null
-
   centerX: null
   centerY: null
   radius: null
 
-  cells: {}
   focuses: []
 
   ready: ->
-    @root = @.$.darts
-    @s = new Snap(@root)
-
-    width = @root.clientWidth || parseInt @root.getAttribute('width')
-    height = @root.clientHeight || parseInt @root.getAttribute('height')
+    width = @.$.darts.clientWidth || parseInt @.$.darts.getAttribute('width')
+    height = @.$.darts.clientHeight || parseInt @.$.darts.getAttribute('height')
     @centerX = width / 2
     @centerY = height / 2
     @radius = Math.min(@centerX, @centerY) * 0.95
 
-    dartsUi = @draw()
-
-    # @dartsDevice = new DartsDevice()
+    @draw()
 
   draw: ->
-    dartsUi = @s.g();
+    s = new Snap @.$.darts
 
-    dartsUi.append(@drawCircle 'darts-base', 'base', @radius)
+    @drawCircle s, 'darts-base', 'base', @radius
 
-    dartsUi.append(@drawRings 'darts-cell darts-high-ring', '2',   @radius * 0.75, @radius * 0.04)
-    dartsUi.append(@drawRings 'darts-cell darts-single',    '1-o', @radius * 0.60, @radius * 0.25)
-    dartsUi.append(@drawRings 'darts-cell darts-high-ring', '3',   @radius * 0.45, @radius * 0.04)
-    dartsUi.append(@drawRings 'darts-cell darts-single',    '1-i', @radius * 0.25, @radius * 0.35)
+    @drawRings s, 'darts-cell darts-high-ring', '2',   @radius * 0.75, @radius * 0.04
+    @drawRings s, 'darts-cell darts-single',    '1-o', @radius * 0.60, @radius * 0.25
+    @drawRings s, 'darts-cell darts-high-ring', '3',   @radius * 0.45, @radius * 0.04
+    @drawRings s, 'darts-cell darts-single',    '1-i', @radius * 0.25, @radius * 0.35
 
-    dartsUi.append(@drawCircle 'darts-cell darts-bull darts-bull-outer', '25-1', @radius * 0.1)
-    dartsUi.append(@drawCircle 'darts-cell darts-bull darts-bull-inner', '25-2', @radius * 0.05)
+    @drawCircle s, 'darts-cell darts-bull darts-bull-outer', '25-1', @radius * 0.1
+    @drawCircle s, 'darts-cell darts-bull darts-bull-inner', '25-2', @radius * 0.05
 
-    dartsUi.append(@drawPoints 'darts-point', @radius * 0.9, @radius * 0.1, '#fff')
+    @drawPoints s, 'darts-point', @radius * 0.9, @radius * 0.1, '#fff'
 
-    return dartsUi
-
-  drawCircle: (className, key, radius) ->
-    circle = @s.circle @centerX, @centerY, radius
+  drawCircle: (s, className, key, radius) ->
+    circle = s.circle @centerX, @centerY, radius
     circle.attr
       class: className
       id: key
 
-    @cells[key] = circle
-
-    return circle
-
-  drawRings: (className, key, radius, strokeWidth) ->
-    rings = @s.g()
+  drawRings: (s, className, key, radius, strokeWidth) ->
+    rings = s.g()
 
     for i in [0..19]
       angle0 = (i * 18 - 9) * Math.PI / 180
@@ -68,7 +52,7 @@ Polymer 'darts-ui',
       x1 = @centerX + radius * Math.sin angle1
       y1 = @centerY - radius * Math.cos angle1
 
-      ring = @.s.path('M' + x0 + ' ' + y0 + ' A' + radius + ' ' + radius + ' 0 0 1 ' + x1 + ' ' + y1)
+      ring = s.path 'M' + x0 + ' ' + y0 + ' A' + radius + ' ' + radius + ' 0 0 1 ' + x1 + ' ' + y1
       ring.attr
         class: className
         strokeWidth: strokeWidth
@@ -76,18 +60,14 @@ Polymer 'darts-ui',
 
       rings.append ring
 
-      @cells[@POINTS[i] + '-' + key] = ring;
-
-    return rings
-
-  drawPoints: (className, radius) ->
-    points = @s.g().attr {class: 'points'}
+  drawPoints: (s, className, radius) ->
+    points = s.g().attr {class: 'points'}
 
     for i in [0..19]
       angle = (i * 18) * Math.PI / 180
-      x = @centerX + radius * Math.sin(angle)
-      y = @centerY - radius * Math.cos(angle)
-      point = @s.text x, y, @POINTS[i]
+      x = @centerX + radius * Math.sin angle
+      y = @centerY - radius * Math.cos angle
+      point = s.text x, y, @POINTS[i]
       point.attr
         class: className
         fontSize: (radius * 0.15) + 'px'
@@ -98,8 +78,6 @@ Polymer 'darts-ui',
 
       points.append point
 
-    return points
-
   onClick: (event) ->
     id = event.target.id
     @focuses = id
@@ -107,13 +85,13 @@ Polymer 'darts-ui',
     [score, ratio] = id.split '-'
     @fire 'hit', {score, ratio} if ratio?
 
-  focusesChanged: (oldFocuses, newFocuses)->
+  focusesChanged: (oldFocuses, newFocuses) ->
     if oldFocuses.length > 0
       for focus in oldFocuses.split ' '
-        element = @.$.darts.getElementById(focus)
+        element = @.$.darts.getElementById focus
         element.classList.remove @FOCUS_CLASS if element?
 
     if newFocuses.length > 0
       for focus in newFocuses.split ' '
-        element = @.$.darts.getElementById(focus)
+        element = @.$.darts.getElementById focus
         element.classList.add @FOCUS_CLASS if element?
