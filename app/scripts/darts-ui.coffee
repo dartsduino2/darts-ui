@@ -13,7 +13,6 @@ Polymer 'darts-ui',
   radius: null
 
   cells: {}
-  focusedElement: null
   focuses: []
 
   ready: ->
@@ -29,8 +28,6 @@ Polymer 'darts-ui',
     dartsUi = @draw()
 
     # @dartsDevice = new DartsDevice()
-
-    @showFocuses()
 
   draw: ->
     dartsUi = @s.g();
@@ -104,33 +101,19 @@ Polymer 'darts-ui',
     return points
 
   onClick: (event) ->
-    @removeFocus @focusedElement if @focusedElement?
-
-    @setFocus event.target
-
     id = event.target.id
+    @focuses = id
+
     [score, ratio] = id.split '-'
+    @fire 'hit', {score, ratio} if ratio?
 
-    return unless ratio?
+  focusesChanged: (oldFocuses, newFocuses)->
+    if oldFocuses.length > 0
+      for focus in oldFocuses.split ' '
+        element = @.$.darts.getElementById(focus)
+        element.classList.remove @FOCUS_CLASS if element?
 
-    @fire 'hit', {score, ratio}
-
-  setFocus: (element) ->
-    element.classList.add @FOCUS_CLASS
-    @focusedElement = element
-
-  removeFocus: (element) ->
-    element.classList.remove @FOCUS_CLASS
-    @focusedElement = null
-
-  showFocuses: ->
-    for focus in @focuses.split ' '
-      element = @.$.darts.getElementById(focus)
-      @setFocus element if element?
-
-  hit: (value) ->
-    id = @dartsDevice.getId value
-    cell = @cells[id]
-
-    @removeFocus @focusedElement if @focusedElement?
-    @setFocus cell.node
+    if newFocuses.length > 0
+      for focus in newFocuses.split ' '
+        element = @.$.darts.getElementById(focus)
+        element.classList.add @FOCUS_CLASS if element?
