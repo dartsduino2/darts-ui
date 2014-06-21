@@ -126,6 +126,3 @@ Polymer 'darts-ui',
 
         @blur @focusedElement if @focusedElement?
         @focus cell.node
-
-    test: =>
-        console.log 'ok'
