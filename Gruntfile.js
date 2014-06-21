@@ -370,6 +370,17 @@ module.exports = function (grunt) {
         'imagemin',
         'svgmin'
       ]
+    },
+    vulcanize: {
+      default: {
+        options: {
+          inline: true,
+          strip: true
+        },
+        files: {
+          'dist/darts-ui.html': 'dist/elements/darts-ui.html'
+        },
+      },
     }
   });
 
@@ -422,9 +433,10 @@ module.exports = function (grunt) {
     'cssmin',
     'uglify',
     'copy:dist',
-    'rev',
+    // 'rev',
     'usemin',
-    'htmlmin'
+    'htmlmin',
+    'vulcanize'
   ]);
 
   grunt.registerTask('default', [
