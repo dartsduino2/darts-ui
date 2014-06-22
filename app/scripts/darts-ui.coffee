@@ -17,6 +17,10 @@ Polymer 'darts-ui',
 
     @draw()
 
+    @device = new DartsDevice()
+    @device.connect (id) =>
+      @onHit id
+
   draw: ->
     s = new Snap @.$.darts
 
@@ -86,6 +90,9 @@ Polymer 'darts-ui',
 
   onClick: (event) ->
     id = event.target.id
+    @onHit id
+
+  onHit: (id) ->
     @focuses = id
 
     [score, ratio] = id.split '-'
