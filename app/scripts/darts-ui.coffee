@@ -9,10 +9,10 @@ Polymer 'darts-ui',
   radius: null
 
   ready: ->
-    width = @.$.darts.clientWidth || parseInt @.$.darts.getAttribute('width')
-    height = @.$.darts.clientHeight || parseInt @.$.darts.getAttribute('height')
-    @centerX = width / 2
-    @centerY = height / 2
+    @width = @.clientWidth || parseInt @.getAttribute('width')
+    @height = @.clientHeight || parseInt @.getAttribute('height')
+    @centerX = @width / 2
+    @centerY = @height / 2
     @radius = Math.min(@centerX, @centerY) - 2
 
     @draw()
