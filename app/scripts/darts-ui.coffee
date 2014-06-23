@@ -18,8 +18,7 @@ Polymer 'darts-ui',
     @draw()
 
     @device = new DartsDevice()
-    @device.connect (id) =>
-      @onHit id
+    @device.connect @onHit.bind(@)
 
   draw: ->
     s = new Snap @.$.darts
