@@ -95,5 +95,5 @@ Polymer 'darts-ui',
   onHit: (id) ->
     @focuses = id
 
-    [score, ratio] = id.split '-'
-    @fire 'hit', {score, ratio} if ratio?
+    [point, ratio] = id.split '-'
+    @fire 'hit', {point, ratio} if ratio?
