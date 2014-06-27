@@ -1,4 +1,6 @@
 
+$darts-animation-duration: 100ms;
+
 $darts-base-color: #000;
 $darts-border-color: #888;
 
@@ -61,7 +63,9 @@ $darts-font-color: #eee;
   fill: $darts-font-color;
 }
 
-.darts-cell {
+.darts-cell{
+  transition: stroke $darts-animation-duration linear, fill $darts-animation-duration linear;
+
   &.darts-focus {
     stroke: $darts-color-focus !important;
     fill: $darts-color-focus !important;
