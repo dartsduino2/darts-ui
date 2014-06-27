@@ -60,6 +60,8 @@ Polymer 'darts-ui',
 
       rings.append ring
 
+    return
+
   drawPoints: (s, className, radius) ->
     points = s.g().attr {class: 'points'}
 
@@ -76,6 +78,8 @@ Polymer 'darts-ui',
 
       points.append point
 
+    return
+
   focusesChanged: (oldFocuses, newFocuses) ->
     if oldFocuses?.length > 0
       for focus in oldFocuses.split ' '
@@ -86,6 +90,8 @@ Polymer 'darts-ui',
       for focus in newFocuses.split ' '
         element = @.$.darts.getElementById focus
         element.classList.add @FOCUS_CLASS if element?
+
+    return
 
   onClick: (event) ->
     id = event.target.id
